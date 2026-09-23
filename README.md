@@ -1,3 +1,3 @@
-# Browser-Patched
+# Browser Patched
 
 Personal or for whoever wants
