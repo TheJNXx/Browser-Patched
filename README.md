@@ -1,3 +1,3 @@
 # Browser-Patched
 
-Personal (or for whoever wants)
+Personal or for whoever wants
