@@ -49,6 +49,7 @@ jobs:
           ')
 
           BRAVE_PATCH_HASH=$(echo "$BRAVE_PATCHES" | sha256sum | cut -d' ' -f1)
+          BRAVE_PATCH_HASH_SHORT="${BRAVE_PATCH_HASH:0:8}"
 
           RESPONSE=$(curl -s https://api.github.com/repos/kveld9/kveld-morphe-patches/releases/latest)
           PATCH_TAG=$(echo "$RESPONSE" | jq -r '.tag_name')
@@ -63,6 +64,7 @@ jobs:
           echo "patch_url=$PATCH_URL" >> "$GITHUB_OUTPUT"
           echo "brave_version=$BRAVE_VERSION" >> "$GITHUB_OUTPUT"
           echo "brave_patch_hash=$BRAVE_PATCH_HASH" >> "$GITHUB_OUTPUT"
+          echo "brave_patch_hash_short=$BRAVE_PATCH_HASH_SHORT" >> "$GITHUB_OUTPUT"
 
       - name: Check against already published releases
         id: check_state
@@ -140,7 +142,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: "${{ steps.patch_info.outputs.brave_version }}"
-          name: "Brave ${{ steps.patch_info.outputs.brave_version }}"
+          name: "Brave ${{ steps.patch_info.outputs.brave_version }} (patch ${{ steps.patch_info.outputs.brave_patch_hash_short }})"
           body: "Patched with kveld9's Morphe patches ${{ steps.patch_info.outputs.kveld_tag }} — https://github.com/kveld9/kveld-morphe-patches/releases/tag/${{ steps.patch_info.outputs.kveld_tag }}\n\nBrave patch fingerprint: ${{ steps.patch_info.outputs.brave_patch_hash }}"
           files: brave-patched.apk
           overwrite_files: true
